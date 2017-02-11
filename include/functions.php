@@ -13,6 +13,7 @@
 	# 2016-09-16 17:00:45 - base domainname
 	# 2016-09-18 12:22:34 - adding config constant for thumbnail quality
 	# 2016-09-22 22:27:59 - base 2 to base 3
+	# 2017-02-12 00:15:21 - trailing space removal
 
 	# legend
 	# lnr = login not required
@@ -21,24 +22,24 @@
 	# warm up sessions
 	session_start();
 
-	# warm up translations                                                                                                                     
+	# warm up translations
 	$language = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && ($language = explode(",", $_SERVER['HTTP_ACCEPT_LANGUAGE'], 2 )) ? str_replace('-', '_', strtolower($language[0])) : 'en_US';
 
-	switch ($language) {                                                                                                                  
-		default:                                                                                                                      
-			$locale = 'en_US';                                                                                                    
-			break;                                                                                                                
-		case 'sv':                                                                                                                    
-		case 'sv_se':                                                                                                                 
-			$locale = 'sv_SE';                                                                                                    
-			break;                                                                                                                
-	}                                                                                                                                     
+	switch ($language) {
+		default:
+			$locale = 'en_US';
+			break;
+		case 'sv':
+		case 'sv_se':
+			$locale = 'sv_SE';
+			break;
+	}
 
 	$locale .= '.utf-8';
 
-	putenv('LC_ALL='.$locale);                                                                                                            
-	setlocale(LC_ALL, $locale);                                                                                                           
-	bindtextdomain("messages", "locale");                                                                                              
+	putenv('LC_ALL='.$locale);
+	setlocale(LC_ALL, $locale);
+	bindtextdomain("messages", "locale");
 	textdomain("messages");
 
 	# tell the main config file that there is a custom config file for this site
@@ -47,9 +48,9 @@
 	# get base constants
 	require_once('config.php');
 
-	define('SITE_SHORTNAME', 'mediaarchive');	
+	define('SITE_SHORTNAME', 'mediaarchive');
 
-	# make sure we got base array	
+	# make sure we got base array
 	$_SESSION[SITE_SHORTNAME] = isset($_SESSION[SITE_SHORTNAME]) ? $_SESSION[SITE_SHORTNAME] : array();
 
 	# get database functions and so on
@@ -70,11 +71,11 @@
 	}
 
 	# register a shutdown function
-	register_shutdown_function('shutdown_function', $link);	
+	register_shutdown_function('shutdown_function', $link);
 
 	# m-ysql_query("SET NAMES 'utf8'");
-	# m-ysql_query("SET CHARACTER SET utf8 ");	
-	
+	# m-ysql_query("SET CHARACTER SET utf8 ");
+
 	$months = array(
 		1 => _('January'),
 		2 => _('February'),
@@ -110,7 +111,7 @@
 
 	# lnr - to make a thumbnail
 	function makeThumbnail($desired_size, $in, $out, $display=false) {
-	
+
 		# missing imagemagick - try service
 		if (!file_exists(MAGICK_PATH.'convert')) {
 
@@ -144,10 +145,10 @@
 			}
 
 			file_put_contents($out, $response);
-		
+
 			return true;
 		}
-	
+
 
 		#if ($desired_size === '160x120') {
 			# 30 ser skabbigt ok ut
@@ -252,7 +253,7 @@
 
 		# missing thumbnail dir?
 		if (
-			!is_dir(THUMBNAIL_DIR) 
+			!is_dir(THUMBNAIL_DIR)
 			|| trim(THUMBNAIL_DIR) === '/'
 			|| substr(THUMBNAIL_DIR, -1,1) !== '/'
 		) {
@@ -268,7 +269,7 @@
 		}
 
 		$mime = mime_content_type($sourcepath);
-				
+
 		if (strpos($mime, 'image/') !== false) {
 
 			# walk thumb sizes
@@ -281,7 +282,7 @@
 				if ($filepath === false) {
 					die('Failed getting thumbnail path: '.$sourcepath);
 				}
-			
+
 				# does this thumbnail not exist?
 				if (!file_exists($filepath)) {
 					$s = trim(exec('ps ax|grep convert|grep -v grep'));
@@ -298,7 +299,7 @@
 						$stats[$v] = 'failed';
 						continue;
 					}
-				
+
 						$stats[$v] = 'created';
 				} else {
 						$stats[$v] = 'already done';
@@ -308,14 +309,14 @@
 
 			# walk thumb sizes
 			# foreach ($thumbsizes as $k => $v) {
-		
+
 			# check if the main thumb is there
 			$normalthumbpath = get_thumbnail_path($hash, 'normal');
 			$smallthumbpath = get_thumbnail_path($hash, 'small');
-			
+
 			# no main thumb?
 			if (!file_exists($normalthumbpath)) {
-			
+
 				# run video sheet to make it
 				$c = 'php '.DPTOOLS_DIR.'videosheet --filename='.escapeshellarg($sourcepath).($verbose ? ' -vv' : '').' --format=jpeg --quality=75 --thumbsize=205,-1 --compact --output='.escapeshellarg($normalthumbpath);
 				passthru($c, $r);
@@ -344,19 +345,19 @@
 				makeThumbnail($thumbsizes['small'], $normalthumbpath, $smallthumbpath);
 				if (!file_exists($smallthumbpath)) {
 					echo 'Failed creating thumbnail: '.$filepath;
-					
+
 					return array(
 						'small' => 'failed',
 						'normal' => $stats[$thumbsizes['normal']]
 					);
-					
+
 				}
 				$stats[$thumbsizes['small']] = 'created';
 
 			} else {
-				$stats[$thumbsizes['normal']] = 'already done';			
+				$stats[$thumbsizes['normal']] = 'already done';
 			}
-			
+
 		} # else {
 			#echo $sourcepath;
 			#echo "\n".$mime;
@@ -368,54 +369,54 @@
 	# lnr - convert exif-formatted datetime with : date separator to - separator
 	function correct_exif_datetime($datetime) {
 
-		# match xxxx-xx-xxTxx:xx:xxZ - is T and Z in the string?	
+		# match xxxx-xx-xxTxx:xx:xxZ - is T and Z in the string?
 		if (strpos($datetime, 'T') !== false && strpos($datetime, 'Z') !== false) {
-			# try to decode it as a date string		
+			# try to decode it as a date string
 			$test = strtotime ($datetime);
 			if ($test !== false) {
 				return date('Y-m-d H:i:s', $test);
 			}
 		}
-	
+
 		# match xxxx:xx:xx xx:xx:xx - check for the format
 		preg_match_all('/^([0-9]{3}[0-9]+)[\:|\-]([0-1][0-9])[\:|\-]([0-3][0-9]) ([0-5][0-9]\:[0-5][0-9]\:[0-5][0-9])$/mi', $datetime, $m);
 		# check if xxxx-xx-xx xx:xx:xx is not there
 		if (!isset($m[1][0], $m[2][0], $m[3][0], $m[4][0])) {
 			# failed finding results
-			return false;		
+			return false;
 		}
-		
+
 		# return formatted string
 		return $m[1][0].'-'.$m[2][0].'-'.$m[3][0].' '.$m[4][0];
 	}
 
 	# lnr - to get shutter speed and fstop
 	# from: darkain at darkain dot com
-	function exif_get_float($value) { 
-		$pos = strpos($value, '/'); 
-		if ($pos === false) return (float) $value; 
-		$a = (float) substr($value, 0, $pos); 
-		$b = (float) substr($value, $pos+1); 
-		return ($b == 0) ? ($a) : ($a / $b); 
-	} 
+	function exif_get_float($value) {
+		$pos = strpos($value, '/');
+		if ($pos === false) return (float) $value;
+		$a = (float) substr($value, 0, $pos);
+		$b = (float) substr($value, $pos+1);
+		return ($b == 0) ? ($a) : ($a / $b);
+	}
 
 	# lnr - to get shutter
-	function exif_get_shutter(&$exif) { 
-		if (!isset($exif['ShutterSpeedValue'])) return false; 
-		$apex    = exif_get_float($exif['ShutterSpeedValue']); 
-		$shutter = pow(2, -$apex); 
-		if ($shutter == 0) return false; 
-		if ($shutter >= 1) return round($shutter) . 's'; 
-		return '1/' . round(1 / $shutter) . 's'; 
-	} 
+	function exif_get_shutter(&$exif) {
+		if (!isset($exif['ShutterSpeedValue'])) return false;
+		$apex    = exif_get_float($exif['ShutterSpeedValue']);
+		$shutter = pow(2, -$apex);
+		if ($shutter == 0) return false;
+		if ($shutter >= 1) return round($shutter) . 's';
+		return '1/' . round(1 / $shutter) . 's';
+	}
 
 	# lnr - to get fstop
-	function exif_get_fstop(&$exif) { 
-		if (!isset($exif['ApertureValue'])) return false; 
-		$apex  = exif_get_float($exif['ApertureValue']); 
-		$fstop = pow(2, $apex/2); 
-		if ($fstop == 0) return false; 
-		return 'f/' . round($fstop,1); 
+	function exif_get_fstop(&$exif) {
+		if (!isset($exif['ApertureValue'])) return false;
+		$apex  = exif_get_float($exif['ApertureValue']);
+		$fstop = pow(2, $apex/2);
+		if ($fstop == 0) return false;
+		return 'f/' . round($fstop,1);
 	}
 
 	# lnr - file sizing function, from stachu540 at gmail dot com 30-Aug-2011 04:02, http://se2.php.net/filesize
@@ -428,7 +429,7 @@
 
 	# lnr - to get the exposure date from a file, first based on exif data, then on the date in the path
 	function get_exposure_date($exifdata, $file) {
-	
+
 		# first try to get it from exifdata
 		if (isset($exifdata['DateTime']) && $date = strtotime(correct_exif_datetime($exifdata['DateTime']))) return date('Y-m-d H:i:s', $date);
 		if (isset($exifdata['DateTimeOriginal']) && $date = strtotime(correct_exif_datetime($exifdata['DateTimeOriginal']))) return date('Y-m-d H:i:s', $date);
@@ -452,7 +453,7 @@
 
 				return date('Y-m-d H:i:s', strtotime($year.'-'.$month.'-'.$day));
 			}
-		
+
 			# try to get only year
 			$mcount = preg_match_all('/^.*\/([0-9x]{3}[0-9x]+)\/.*$/im', $file, $m);
 
@@ -460,14 +461,14 @@
 
 				$year	= isset($m[1][0]) ? str_replace('x', '0', $m[1][0]) : '0000';
 				$month = 1;
-				$day = 1;			
+				$day = 1;
 
 				return date('Y-m-d H:i:s', strtotime($year.'-'.$month.'-'.$day));
 			}
 		}
 
 		# all failed, try this
-		return '0000-00-00 00:00:00';		
+		return '0000-00-00 00:00:00';
 	}
 
 	# lr - to get the logged in user
@@ -480,7 +481,7 @@
 
 	# to check if user is logged in
 	function is_logged_in($no_guest_mode=false) {
-	
+
 		# is guest mode allowed and activated
 		if (!$no_guest_mode && GUEST_MODE) return true;
 		# or are we really logged in
@@ -521,8 +522,8 @@
 
 			$lat = (float) $lat_degrees+((($lat_minutes*60)+($lat_seconds))/3600);
 			$lng = (float) $lng_degrees+((($lng_minutes*60)+($lng_seconds))/3600);
-	
-			//If the latitude is South, make it negative. 
+
+			//If the latitude is South, make it negative.
 			//If the longitude is west, make it negative
 			$GPSLatitudeRef  == 's' ? $lat *= -1 : '';
 			$GPSLongitudeRef == 'w' ? $lng *= -1 : '';
@@ -534,7 +535,7 @@
 		}
 		return false;
 	}
-	
+
 	# --- translation - from kreosot ----
 
 	# to get the current locale
@@ -542,7 +543,7 @@
 		global $translations;
 		return reset($translations['languages'][ $translations['current']['index'] ]['locales']);
 	}
-	
+
 	# to translate string
 	function get_translation_texts() {
 		# get translation data and translations
@@ -558,7 +559,7 @@
 		}
 
 		return is_logged_in(false) ? array_merge($translations['languages'][$tindex]['content'], $translations['languages'][$tindex]['content_logged_in']) : $translations['languages'][$tindex]['content'];
-	}	
+	}
 
 	# to get a matching locale translation index, send in locale and get a working translation index in return
 	function get_working_locale($langs_available, $try_lang = false) {
@@ -758,24 +759,24 @@
 		}
 		return $s;
 	}
-	
+
 	# to convert the paths in an array result to real paths
 	function fullpaths($data, $columns) {
-	
+
 		foreach ($data as $k => $v) {
-		
+
 			foreach ($columns as $column) {
-			
+
 				$realpath = realpath($data[$k][$column]);
-				
+
 				die($realpath);
-				
+
 				if ($realpath !== false) {
 					$data[$k][$column] = $realpath;
 				}
 			}
-		
+
 		}
-		return $data;	
+		return $data;
 	}
 ?>

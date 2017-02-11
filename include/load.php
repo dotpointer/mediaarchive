@@ -14,6 +14,7 @@
 	# 2016-09-25 21:42:42 - jslint
 	# 2016-09-26 23:55:58 - login display, trash display
 	# 2016-09-30 09:50:59 - greeting text
+	# 2017-02-12 00:16:00 - trailing space removal
 
 	require_once('functions.php');
 	require_once('request.php');
@@ -28,7 +29,7 @@
 	# are we logged in or guest mode
 	if (is_logged_in(false)) {
 
-		
+
 
 		# get statistics
 		$sql = 'SELECT COUNT(distinct id_media) AS labeled_media FROM '.DATABASE_TABLES_PREFIX.'relations_media_labels';
@@ -173,13 +174,13 @@ var g = {
 			return parseInt(x, 10);
 		};
 
-		// to check if google maps library is ready		
+		// to check if google maps library is ready
 		g.maps_loaded = function() {
 			// is the google maps library gone?
 			if (typeof google !== "object" || google.maps === undefined ) {
 				// then quit here
 				return false;
-			}		
+			}
 
 			return true;
 		};
@@ -240,7 +241,7 @@ var g = {
 				return false;
 			};
 
-			
+
 			// add it to the container
 			result.append(
 				$("<a/>")
@@ -371,17 +372,17 @@ var g = {
 					return g.msg[i][1];
 				}
 			}
-			
+
 			return s;
 		};
 
 		g.is_logged_in = function(no_guest_mode) {
-		
+
 			if (g.guest_mode && !no_guest_mode) {
 				return true;
 			}
-			
-			return g.logged_in;		
+
+			return g.logged_in;
 		};
 
 		g.check_data_for_updates = function(data) {
@@ -502,10 +503,10 @@ var g = {
 								.append(
 									$("<div/>")
 										.addClass("label_statistics")
-										.text( 
-										
+										.text(
+
 											(g.label_statistics.total_media > 0)
-											?	
+											?
 											(g.label_statistics.labeled_media + " / " + g.label_statistics.total_media + "(" + Math.round( ( g.label_statistics.labeled_media / g.label_statistics.total_media) * 100) + "%)")
 											:
 											g.t("No media")
@@ -583,7 +584,7 @@ var g = {
 									$(".thumbnail_small img").removeClass().addClass("effect_" + $("#effect").val());
 
 									params.effect = $("#effect").val();
-									
+
 									// record this change as a new state
 									g.push_state(undefined, {effect: params.effect}, true);
 
@@ -1163,7 +1164,7 @@ var g = {
 							.attr("id", "switchbar")
 							.append(
 										g.is_logged_in(true)
-										?							
+										?
 										$("<button/>")
 											.attr({
 												"id": "switchbar_button_tools",
@@ -1195,7 +1196,7 @@ var g = {
 												return false;
 											})
 										:
-<?php 
+<?php
 										if (LOGIN_MODE) {
 ?>
 										$("<button/>")
@@ -1221,7 +1222,7 @@ var g = {
 <?php									} else { ?>
 											""
 <?php									} ?>
-										
+
 							)
 					)
 							.append(
@@ -1325,12 +1326,12 @@ var g = {
 
 		// to push a history state
 		g.push_state = function(page, options, merge_options_with_last_page_options) {
-		
+
 			// if page was not defined, then take the the last page we switched to
 			page = page !== undefined ? page : g.last_switch_page.page;
-		
+
 			if (options === undefined ) {
-			
+
 				options = g.last_switch_page.options;
 			} else {
 				// should we merge the new options with the existing ones?
@@ -1339,10 +1340,10 @@ var g = {
 				// overwrite the options
 				}
 			}
-			
+
 			g.last_switch_page.page = page;
 			g.last_switch_page.options = options;
-	
+
 			// tell history where we are going
 			window.history.pushState(
 				// object with variables
@@ -1355,7 +1356,7 @@ var g = {
 				)
 			);
 
-		
+
 		};
 
 		g.switch_page = function(page, options, pushstate) {
@@ -1383,9 +1384,9 @@ var g = {
 					)
 				);
 				*/
-				
+
 				g.push_state(page, options);
-				
+
 			}
 
 			switch (page) {
@@ -1458,9 +1459,9 @@ var g = {
 														.attr(params.viewoptions === "simple" ? {selected: true} : {})
 												)
 												.change(function(e) {
-													
+
 													// 1 of 3
-													
+
 													e.preventDefault();
 
 													switch ($("#viewoptions").val()) {
@@ -1475,14 +1476,14 @@ var g = {
 																.removeClass("details")
 																.addClass("simple");
 															break;
-													}													
-													
+													}
+
 													params.viewoptions = $("#viewoptions").val();
-									
+
 													// record this change as a new state
 													g.push_state(undefined, {viewoptions: params.viewoptions}, true);
 
-													return true;													
+													return true;
 												})
 
 										)
@@ -1609,7 +1610,7 @@ var g = {
 														}
 													//} // eof-walk labels in this item
 													});
-												
+
 													$(".content .items:last .clear_both").before(
 														$("<div/>")
 															.addClass("item")
@@ -1638,7 +1639,7 @@ var g = {
 																	)
 															)
 															.append(
-																(data.data[i].items[j].latitude !== undefined && data.data[i].items[j].longitude !== undefined && g.pi10(data.data[i].items[j].latitude) !== -1 && g.pi10(data.data[i].items[j].longitude) !==-1) 
+																(data.data[i].items[j].latitude !== undefined && data.data[i].items[j].longitude !== undefined && g.pi10(data.data[i].items[j].latitude) !== -1 && g.pi10(data.data[i].items[j].longitude) !==-1)
 																?
 																$("<div/>")
 																	.addClass("gps")
@@ -1762,10 +1763,10 @@ var g = {
 															ul_tmp_raws.children()
 														)
 														.append(
-														
+
 															g.is_logged_in(true)
 															?
-														
+
 																(// view trash?
 																data.data.item.trash ?
 
@@ -1854,7 +1855,7 @@ var g = {
 									}
 								//}
 								});
-								
+
 							} // if-exif-short
 
 							if (data.data.item.exif) {
@@ -2170,11 +2171,11 @@ var g = {
 
 								// google.maps.event.addDomListener(window, "load", initialize);
 								window.setTimeout(function () {
-								
+
 									if (!g.maps_loaded()) {
 										return true;
 									}
-									
+
 									var map;
 									var mapOptions;
 									var marker;
@@ -2189,20 +2190,20 @@ var g = {
 									};
 
 									map = new google.maps.Map(window.document.getElementById("map-canvas"), mapOptions);
-									
+
 									// without marker variable = no api keys
 									marker = new google.maps.Marker({
 										position: myLatlng,
 										map: map,
 										title: g.t("Here was the photo taken.")
 									});
-									
+
 									// this is just done to please jslint
 									if (marker !== undefined) {
 										// put current marker in the object tree, for no reason just to do something for jslint
 										g.marker_current = marker;
 									}
-									
+
 								}, 100);
 
 								$("#map-canvas").addClass("on");
@@ -2264,10 +2265,10 @@ var g = {
 														.addClass("simple");
 													break;
 											}
-											
+
 											g.push_state(undefined, {viewoptions: params.viewoptions}, true);
-											
-											return true;		
+
+											return true;
 										})
 								)
 						)
@@ -2280,9 +2281,9 @@ var g = {
 					$(".content>.clear_both:last").before(
 						g.print_breadcrumbs(options.path, false, true)
 					);
-					
+
 					if (options.path === "/") {
-						$(".content>.clear_both:last").before(					
+						$(".content>.clear_both:last").before(
 							$("<p>")
 								.append(
 									g.t("Welcome to the media archive, a photo gallery made by dotpointer in jQuery, JavaScript, PHP, MySQL, HTML and CSS. This site loads data using web API calls and the data is transferred using the JSON format. Photos are indexed through a home built indexer.")
@@ -2362,7 +2363,7 @@ var g = {
 										.append(
 											$("<div/>")
 												.addClass("clear_both")
-										)										
+										)
 								);
 
 								// walk the folders
@@ -2430,7 +2431,7 @@ var g = {
 									}
 								//} // for in folders
 								});
-							} 
+							}
 
 							// add a container for items
 							$(".content>.clear_both:last")
@@ -2454,8 +2455,8 @@ var g = {
 
 									// walk labels in this item
 									//for (k in data.data.items[i].id_labels) {
-									
-									
+
+
 									if (data.data.items[i].id_labels !== undefined) {
 										Object.keys(data.data.items[i].id_labels).forEach(function (k) {
 											if (data.data.items[i].id_labels.hasOwnProperty(k)) {
@@ -2487,7 +2488,7 @@ var g = {
 										//} // eof-walk labels in this item
 										});
 									}
-									
+
 									// add an item
 									// $(".content .items:last .clear_both").before(
 									// _inside_ the last items container there is a .clear_both, put this item before that
@@ -2800,9 +2801,9 @@ var g = {
 												.attr(params.viewoptions === "simple" ? {selected: true} : {})
 										)
 										.change(function(e) {
-										
+
 											// 3 of 3
-										
+
 											e.preventDefault();
 
 											params.viewoptions = $("#viewoptions").val();
@@ -2822,9 +2823,9 @@ var g = {
 
 													break;
 											}
-											
+
 											g.push_state(undefined, {viewoptions: params.viewoptions}, true);
-											
+
 											return true;
 										})
 								)
@@ -3017,11 +3018,11 @@ var g = {
 			switch (params.page) {
 				case "find":
 					window.location = $("a.back").attr("href");
-					
+
 					break;
 				case "item":
 					if (params.id_prev !== undefined && params.id_prev > 0) {
-						
+
 						g.switch_page("item", {
 							path: false,
 							id_media: params.id_prev

@@ -17,7 +17,7 @@ var	g = {};
 		basic.startup = function() {
 			$.getScript("include/load.php?nocache=" + Date.now());
 		};
-		
+
 		basic.startup();
 	});
 }());

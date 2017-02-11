@@ -30,7 +30,7 @@ a
 a:hover {
 	background-color: #fff;
     text-decoration: underline;
-    
+
 }
 
 body {
@@ -96,7 +96,7 @@ input.text {
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px), only screen and (min-device-width : 480px) and (max-device-width : 800px), only screen and (max-width: 720px) {
 	input.text {
 		font-size: 16px;
-	}	
+	}
 }
 
 @media only screen and (max-width: 500px) {
@@ -135,7 +135,7 @@ input.submit
 		font-size:16px;
 		padding-left:10px;
 		padding-right:10px;
-	}	
+	}
 }
 
 button:hover,
@@ -448,7 +448,7 @@ table.exif td
 .content.simple .folder {
 	width: auto;
 	height: auto;
-	
+
 }
 
 .content.simple .folder .name {
@@ -475,7 +475,7 @@ table.exif td
 	color: #fff;
     background-image: url(../img/background_30.png);
 	margin-bottom: 5px;
-    display: inline-block;	
+    display: inline-block;
 }
 
 .breadcrumbs .separator
@@ -487,7 +487,7 @@ table.exif td
 	color: #fff;
     background-image: url(../img/background_30.png);
 	margin-bottom: 5px;
-    display: inline-block;	
+    display: inline-block;
 }
 
 .breadcrumbs a:hover
@@ -599,7 +599,7 @@ table.exif td
 .item_display_map_on {
 	width: 55%;
 	margin-left: 10px;
-	margin-right: 0;	
+	margin-right: 0;
 }
 
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px), only screen and (min-device-width : 480px) and (max-device-width : 800px), only screen and (max-width: 720px) {
@@ -654,18 +654,18 @@ table.exif td
 		overflow: hidden;
 		border: none;
 	}
-	
+
 	.item_display:hover .exif_short {
 		display: none;
 	}
-	
+
 }
 
 .content.details {
     margin-left: auto;
     margin-right: auto;
     max-width: 1160px;
-    
+
 }
 
 
@@ -900,15 +900,15 @@ header ul.menu li {
 	body header ul.menu {
 		display: none;
 	}
-	
+
 	body .label_statistics {
 		display: none;
 	}
-	
+
 	body .breadcrumbs .separator {
 		display: none;
 	}
-	
+
 	body #form_findbar {
 		clear: both;
 	}

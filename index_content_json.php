@@ -11,7 +11,8 @@
 	# 2016-09-13 10:49:22 - guest mode
 	# 2016-09-14 19:50:52 - absolute path to media
 	# 2016-09-15 03:41:24 - absolute page to media - find
-	
+	# 2017-02-12 00:14:38 - trailing space removal
+
 	if (!isset($request['page'])) die();
 
 	# find out what view to display
@@ -47,7 +48,7 @@
 					$folders++;
 					# set the current path so we know til next time
 					$curpath = $item['path'];
-					
+
 					$data[$folderindex] = array(
 						'path' => $item['path'],
 						'items'=> array()
@@ -79,7 +80,7 @@
 							'error' => 'Login is required.'
 						)
 					),
-					(int)$request['prettyprint'] ? JSON_PRETTY_PRINT : 0					
+					(int)$request['prettyprint'] ? JSON_PRETTY_PRINT : 0
 				));
 			}
 
@@ -103,7 +104,7 @@
 						'data' => array(
 							'error' => 'Login is required.'
 						)
-					
+
 					),
 					(int)$request['prettyprint'] ? JSON_PRETTY_PRINT : 0
 				));
@@ -148,7 +149,7 @@
 				}
 
 			}
-			
+
 			$data = @exif_read_data(($item['path'].$item['name']));
 
 			$data_short = array();
@@ -299,7 +300,7 @@
 					}
 				});
 			}
-			
+
 			if (is_array($data)) {
 				array_walk_recursive($data_short, function(&$value, $key) {
 					if (is_string($value)) {
@@ -307,7 +308,7 @@
 					}
 				});
 			}
-			
+
 			$item['exif'] = $data;
 			$item['exif_short'] = $data_short;
 			$item['id_next'] = $js['id_next'];
@@ -322,7 +323,7 @@
 					'data' => array(
 						'item' => $item,
 						'sqllog' => $sqllog
-					)					
+					)
 				),
 				(int)$request['prettyprint'] ? JSON_PRETTY_PRINT : 0
 			));

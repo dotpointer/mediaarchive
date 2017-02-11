@@ -8,6 +8,7 @@
 	# 2016-09-13 16:56:01 - adding database tables prefix
 	# 2016-09-15 03:28:53
 	# 2016-09-17 16:19:44 - table photos->media
+	# 2017-02-12 00:14:02 - trailing space removal
 
 	if (!isset($request['action'])) die();
 
@@ -20,25 +21,25 @@
 			# id_media may be an array
 			$request['id_labels'] = (int)$request['id_labels'];
 			$request['title'] = trim($request['title']);
-						
+
 			$updates = array();
-			
+
 			if (!$request['id_media']) {
 				die(json_encode(
 					array(
-						'status' => false, 
+						'status' => false,
 						'data' => array(
 							'error' => 'ID of media must be supplied.'
 						)
 					),
-					(int)$request['prettyprint'] ? JSON_PRETTY_PRINT : 0	
+					(int)$request['prettyprint'] ? JSON_PRETTY_PRINT : 0
 				));
 			}
 
 			if (!$request['id_labels'] && !strlen($request['title'])) {
 				die(json_encode(
 					array(
-						'status' => false, 
+						'status' => false,
 						'data' => array(
 							'error' => 'ID of label or title must be supplied.'
 						)
@@ -48,33 +49,33 @@
 			}
 
 			# does label exist by id?
-			
+
 			#  && ($request['title'] === '' || !strlen($request['title']))
 			if ($request['id_labels']) {
 				$sql = 'SELECT * FROM '.DATABASE_TABLES_PREFIX.'labels WHERE id="'.dbres($link, $request['id_labels']).'"';
 				$r = db_query($link, $sql);
 				if (!count($r)) die(json_encode(
 					array(
-						'status' => false, 
+						'status' => false,
 						'data' => array(
 							'error' => 'Label with ID '.$request['id_labels'].' does not exist.'
 						)
-						
+
 					),
 					(int)$request['prettyprint'] ? JSON_PRETTY_PRINT : 0
 				));
-				
+
 			# or does it exist by title?
 			} else {
 				$sql = 'SELECT * FROM '.DATABASE_TABLES_PREFIX.'labels WHERE LOWER(title)=LOWER("'.dbres($link, $request['title']).'")';
 				$r = db_query($link, $sql);
-								
+
 				# does it exist in labels?
 				if (count($r)) {
 					$request['id_labels'] = (int)$r[0]['id'];
 				# or is it new?
 				} else {
-				
+
 					# add it to labels
 					$iu = array(
 						'id_users' => $_SESSION[SITE_SHORTNAME]['user']['id'],
@@ -86,7 +87,7 @@
 					$iu = dbpia($link, $iu);
 					$sql = 'INSERT INTO '.DATABASE_TABLES_PREFIX.'labels ('.implode(',', array_keys($iu)).') VALUES('.implode(',', $iu).')';
 					db_query($link, $sql);
-					
+
 					$request['id_labels'] = mysql_insert_id($link);
 					if ($request['id_labels'] === false) {
 						die(json_encode(
@@ -95,25 +96,25 @@
 								'data' => array(
 									'error' => 'Failed getting insertion id for label: '.db_error($link)
 								)
-							), 
+							),
 							(int)$request['prettyprint'] ? JSON_PRETTY_PRINT : 0
 						));
 					}
 				}
-				
 
-				
+
+
 			}
-			
+
 			# is this media already related?
-			
+
 			$status_insertions = 0;
-				
+
 			$request['id_media'] = explode(',', $request['id_media']);
 			foreach ($request['id_media'] as $v) {
 				$sql = 'SELECT * FROM '.DATABASE_TABLES_PREFIX.'relations_media_labels WHERE id_media="'.dbres($link, $v).'" AND id_labels="'.dbres($link, $request['id_labels']).'"';
 				$r = db_query($link, $sql);
-				
+
 				if (!count($r)) {
 					$iu = array(
 						'id_labels' => $request['id_labels'],
@@ -124,11 +125,11 @@
 					$iu = dbpia($link, $iu);
 					$sql = 'INSERT INTO '.DATABASE_TABLES_PREFIX.'relations_media_labels ('.implode(',', array_keys($iu)).') VALUES('.implode(',', $iu).')';
 					$r = db_query($link, $sql);
-					
+
 					$status_insertions++;
 				}
 			}
-			
+
 			$sql = 'SELECT
 						l.id,
 						l.title,
@@ -147,8 +148,8 @@
 							r.id_labels=l.id
 					ORDER BY l.title';
 			$updates['labels'] = db_query($link, $sql);
-			
-			
+
+
 			$sql = 'SELECT COUNT(distinct id_media) AS labeled_media from '.DATABASE_TABLES_PREFIX.'relations_media_labels';
 			$label_statistics['labeled_media'] = db_query($link, $sql);
 			$label_statistics['labeled_media'] = $label_statistics['labeled_media'][0]['labeled_media'];
@@ -156,12 +157,12 @@
 			$label_statistics['total_media'] = db_query($link, $sql);
 			$label_statistics['total_media'] = $label_statistics['total_media'][0]['total_media'];
 
-			
+
 			$updates['label_statistics'] = $label_statistics;
-								
+
 			die(json_encode(
 				array(
-					'status' => true, 
+					'status' => true,
 					'data' => array(
 						'updates' => $updates,
 						'refresh_view' => true,
@@ -173,23 +174,23 @@
 			break;
 
 		case 'unlabel_media': # lr - to remove labels from media
-		
+
 			if (!is_logged_in(true)) break;
 
 			$id_media = $request['id_media']; # may be an array
 			$id_labels = (int)$request['id_labels'];
-			
+
 			if (!$id_media) {
 				die('ID of media must be supplied.');
 			}
 
 			if (!$id_labels) {
-				die('ID of label must be supplied.');			
+				die('ID of label must be supplied.');
 			}
-		
+
 			$id_media = explode(',', $id_media);
 			$id_media = dbpia($link, $id_media);
-		
+
 			$sql = 'DELETE FROM '.DATABASE_TABLES_PREFIX.'relations_media_labels WHERE id_labels="'.dbres($link, $id_labels).'" AND id_media IN ('.implode(',', $id_media).')';
 			db_query($link, $sql);
 
@@ -206,7 +207,7 @@
 
 			die(json_encode(
 				array(
-					'status' => true, 
+					'status' => true,
 					'data' => array(
 						'updates' => array(
 						'label_statistics' => $label_statistics
@@ -221,28 +222,28 @@
 		case 'untrash':	# lr - to put files out of trash
 		case 'trash':	# lr - to trash items
 			if (!is_logged_in(true)) break;
-			
+
 			if (!$request['id_media']) die('ID of media must be supplied.');
-			
+
 			$ids = explode(',', $request['id_media']);
-			
+
 			# put into trash
 			if ($request['action'] === 'trash') {
 				$data = array(
 					'trashed' => 0,
 					'already_in_trash' => 0
 				);
-			
+
 				# walk the ids
 				foreach ($ids as $thisid) {
 					# make sure it is numeric
 					if (!is_numeric($request['id_media'])) continue;
-			
+
 					# is it already trashed?
 					$sql = 'SELECT 1 FROM '.DATABASE_TABLES_PREFIX.'trash WHERE id_photos="'.dbres($link, $thisid).'"';
 					$r = db_query($link, $sql);
 					if ($r === false) {
-						# did it fail?				
+						# did it fail?
 						die(json_encode(
 							array(
 								'status' => false,
@@ -253,22 +254,22 @@
 							(int)$request['prettyprint'] ? JSON_PRETTY_PRINT : 0
 						));
 					}
-				
+
 					# already trashed - go next
 					if (count($r)) {
 						continue;
 						$data['already_in_trash']++;
 					}
-				
+
 					# make insert-update-array
 					$iu = array(
 						'id_photos' => $thisid,
 						'created' => date('Y-m-d H:i:s')
 					);
-				
+
 					# make insertion array
 					$iu = dbpia($link, $iu);
-				
+
 					# insert into the trash
 					$sql = 'INSERT INTO '.DATABASE_TABLES_PREFIX.'trash ('.implode(',', array_keys($iu)).') VALUES('.implode(',', $iu).')';
 					$r = db_query($link, $sql);
@@ -282,12 +283,12 @@
 								)
 							),
 							(int)$request['prettyprint'] ? JSON_PRETTY_PRINT : 0
-						));				
+						));
 					}
 					$data['trashed']++;
 				} # foreach-photos
-			
-				# return json 
+
+				# return json
 				/*
 				die(json_encode(array(
 					'status' => true,
@@ -305,24 +306,24 @@
 					$sql = 'DELETE FROM '.DATABASE_TABLES_PREFIX.'trash WHERE id_photos IN ('.implode(', ', $ids).')';
 					$r = db_query($link, $sql);
 					if ($r === false) {
-						# did it fail?				
+						# did it fail?
 						die(json_encode(
 							array(
 								'status' => false,
 								'data' => array(
 									'error' => db_error($link)
 								)
-							), 
+							),
 							(int)$request['prettyprint'] ? JSON_PRETTY_PRINT : 0
 						));
-					}			
-			
+					}
+
 			}
-			
+
 			break;
-			
+
 		case 'login': # lnr - to login
-		
+
 			# 2011-09-18 - visum based :)
 			if (is_logged_in(true)) break;
 			if (!$request['ticket']) die('Missing ticket.');
@@ -340,7 +341,7 @@
 				require_once('class-visum.php'); # visum client class
 				#file_get_contents('class-visum.php');
 				#$link = db_connect();
-				# m-ysql_set_charset('utf8', $link);				
+				# m-ysql_set_charset('utf8', $link);
 				$visum = new Visum(VISUM_METHOD_DIRECT, $link);
 			}
 
@@ -352,7 +353,7 @@
 			} catch(Exception $e) {
 				die($e->getMessage());
 			}
-				
+
 
 			if (!isset($visum_user['id_users'])) {
 				die('Missing user id in visum response.');
@@ -368,16 +369,16 @@
 				# put it into the update array
 				$iu[$v] = $visum_user[$v];
 			}
-			
+
 
 			# was there anything to update supplied?
 			if (count($iu) > 0) {
 				$iu['updated'] = date('Y-m-d H:i:s');
 				$iu = dbpua($link, $iu);
 				$sql = 'UPDATE '.DATABASE_TABLES_PREFIX.'users SET '.implode(',',$iu).' WHERE id_visum="'.dbres($link, $id_visum).'"';
-				$r = db_query($link, $sql);				
+				$r = db_query($link, $sql);
 			}
-			
+
 			# try to find the user, did it exist in local db?
 			$sql = 'SELECT * FROM '.DATABASE_TABLES_PREFIX.'users WHERE id_visum="'.dbres($link, $id_visum).'"';
 			$r = db_query($link, $sql);
@@ -388,7 +389,7 @@
 
 			# this means user is logged in
 			$_SESSION[SITE_SHORTNAME]['user'] = $user;
-			
+
 			# now we have a visum user id to match against our own database and then create a login, that's all that is needed
 
 			# reload page

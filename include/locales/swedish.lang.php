@@ -2,6 +2,7 @@
 
 # changelog
 # 2015-08-29 22:51:40
+# 2017-02-12 00:15:42 - trailing space removal
 
 # store this into translations
 $translations['languages'][] = array(
@@ -59,8 +60,8 @@ $translations['languages'][] = array(
 		array('items', 'objekt'),
 		array('items. Please confirm this.', 'objekt. Vänligen bekräfta åtgärden.'),
 		array('Label', 'Etikett'),
-		array('Labels', 'Etiketter'),	
-		array('Login', 'Logga in'),	
+		array('Labels', 'Etiketter'),
+		array('Login', 'Logga in'),
 		array('Month', 'Månad'),
 		array('New label', 'Ny etikett'),
 		array('New label title', 'Nytt etikettnamn'),
@@ -71,7 +72,7 @@ $translations['languages'][] = array(
 		array('Not defined', 'Odefinierat'),
 		array('off', 'av'),
 		array('on', 'på'),
-		array('Only images', 'Endast bilder'),		
+		array('Only images', 'Endast bilder'),
 		array('Pixel dimensions', 'Pixelmått'),
 		array('Put to trash', 'Lägg i papperskorgen'),
 		array('Remove from trash', 'Ta ur papperskorgen'),

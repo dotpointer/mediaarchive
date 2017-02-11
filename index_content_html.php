@@ -11,10 +11,11 @@
 	# 2016-09-13 10:49:43 - guest mode
 	# 2016-09-15 21:02:25 - using jquery/jquery-ui 3.1.0/1.12.0
 	# 2016-09-16 17:31:01 - http/https
+	# 2017-02-12 00:14:23 - trailing space removal
 
 	if (!isset($request['page'])) die();
 
-	
+
 ?><!DOCTYPE html>
 <html>
 <head>
@@ -33,7 +34,7 @@
 
 	<script type="text/javascript" src="include/jquery.hotkeys.js"></script>
 
-    <script async defer src="//maps.googleapis.com/maps/api/js<?php echo defined('MAPS_API_KEY') && strlen(MAPS_API_KEY) ? '?key='.MAPS_API_KEY : '' ?><?php /* &callback=initMap */ ?>" type="text/javascript"></script>	
+    <script async defer src="//maps.googleapis.com/maps/api/js<?php echo defined('MAPS_API_KEY') && strlen(MAPS_API_KEY) ? '?key='.MAPS_API_KEY : '' ?><?php /* &callback=initMap */ ?>" type="text/javascript"></script>
 
 	<script type="text/javascript" src="include/intro.js"></script>
 

@@ -18,6 +18,7 @@
 	# 2016-09-17 16:24:07 - table photos->media
 	# 2016-09-22 22:33:45 - base 2 to base 3
 	# 2016-09-26 17:14:05 - bugfix, common sql ran without needing to
+	# 2017-02-12 00:16:33 - trailing space removal
 
 	$sqllog = array();
 
@@ -78,27 +79,27 @@
 			ORDER BY
 				(exposured)
 			';
-	$sqllog[] = $sql;			
+	$sqllog[] = $sql;
 	$years = db_query($link, $sql);
 
-	$sql = 'SELECT 
+	$sql = 'SELECT
 				l.id,
 				l.title,
 				r.amount
 			FROM
-				'.DATABASE_TABLES_PREFIX.'labels AS l 
+				'.DATABASE_TABLES_PREFIX.'labels AS l
 				LEFT JOIN (
-					SELECT 
-						COUNT(*) AS amount, id_labels 
+					SELECT
+						COUNT(*) AS amount, id_labels
 					FROM
 						'.DATABASE_TABLES_PREFIX.'relations_media_labels
 					GROUP BY
 						id_labels
 				) AS r
-				ON 
+				ON
 					r.id_labels=l.id
 			ORDER BY l.title';
-	$sqllog[] = $sql;			
+	$sqllog[] = $sql;
 	$labels = db_query($link, $sql);
 
 	*/
@@ -185,11 +186,11 @@
 			if ($request['heightto'] !== false && strlen($request['heightto'])) {
 				$sql_and[] = 'height <= '.(int)$request['heightto'];
 			}
-			
+
 			if ($request['id_labels'] && (int)$request['id_labels'] > 0) {
 				$sql_and[] = 'r.id_labels = '.(int)$request['id_labels'];
 			} else if ($request['id_labels'] === '-1') {
-				$sql_and[] = 'r.id IS NULL';			
+				$sql_and[] = 'r.id IS NULL';
 			}
 
 			# make sure the items exists
@@ -204,18 +205,18 @@
 			$request['scending'] = in_array($request['scending'], array('asc', 'desc')) ? $request['scending'] : 'desc';
 
 			$sql = 'SELECT
-						p.id,        
+						p.id,
 						p.id_cameras,
-						p.path,      
-						p.name,     
-						p.ed2khash,  
-						p.verified,  
-						p.existing,  
-						p.height,    
-						p.width,     
-						p.latitude,  
-						p.longitude, 
-						p.exposured 
+						p.path,
+						p.name,
+						p.ed2khash,
+						p.verified,
+						p.existing,
+						p.height,
+						p.width,
+						p.latitude,
+						p.longitude,
+						p.exposured
 					FROM
 						'.DATABASE_TABLES_PREFIX.'media AS p
 						'.($request['id_labels'] || $request['id_labels'] === '-1'  ? ' LEFT JOIN '.DATABASE_TABLES_PREFIX.'relations_media_labels AS r ON r.id_media = p.id': '').'
@@ -235,9 +236,9 @@
 
 			# no items - then end here
 			if (!count($items)) break;
-			
+
 			# --- items and labels
-			
+
 			$id_items = array();
 			# collect item ids
 			foreach ($items as $v) {
@@ -246,17 +247,17 @@
 
 			# get label relations related to the items
 			$sql = '
-					SELECT 
-						id_media, 
-						id_labels 
-					FROM 
-						'.DATABASE_TABLES_PREFIX.'relations_media_labels 
-					WHERE 
+					SELECT
+						id_media,
+						id_labels
+					FROM
+						'.DATABASE_TABLES_PREFIX.'relations_media_labels
+					WHERE
 						id_media IN ('.implode(',', $id_items).')
 					';
 			$sqllog[] = $sql;
 			$relations = db_query($link, $sql);
-			
+
 			# were there any relations?
 			if (count($relations)) {
 				# walk items
@@ -301,10 +302,10 @@
 				GROUP BY
 					l.id
 				ORDER BY
-					l.title				
+					l.title
 				'
 				);
-						
+
 			break;
 
 		# to display a folder -------------------------------------------------------------------------------------
@@ -314,25 +315,25 @@
 			$items = array();
 
 			$tmp_path = rawurldecode($request['path']);
-			
+
 			# no working path, get out
 			if (
 				# no length
-				!mb_strlen(trim($tmp_path)) || 
+				!mb_strlen(trim($tmp_path)) ||
 				# not beginning with a slash
-				mb_substr($tmp_path, 0,1) !== '/' || 
+				mb_substr($tmp_path, 0,1) !== '/' ||
 				# not ending with a slash
 				mb_substr($tmp_path, -1) !== '/'
 			) {
 				# this will be false when failing to deliver
 				die($tmp_path);
 			}
-			
-			
+
+
 			# glue the rootpath together with the relative path from the frontend
 			# remove the first slash from the frontend path
 			$tmp_path = ROOTPATH.mb_substr($tmp_path, 1);
-				
+
 			$sql = 				'
 				SELECT
 					*
@@ -360,7 +361,7 @@
 			}
 
 			# --- items and labels
-			
+
 			$id_items = array();
 			# collect item ids
 			foreach ($items as $v) {
@@ -371,17 +372,17 @@
 			if (count($id_items)) {
 
 				# get label relations related to the items
-				$sql = 'SELECT 
-							id_media, 
-							id_labels 
+				$sql = 'SELECT
+							id_media,
+							id_labels
 						FROM
 							'.DATABASE_TABLES_PREFIX.'relations_media_labels
-						WHERE 
+						WHERE
 							id_media IN ('.implode(',', $id_items).')
 						';
 				$sqllog[] = $sql;
 				$relations = db_query($link, $sql);
-			
+
 				# were there any relations?
 				if (count($relations)) {
 					# walk items
@@ -400,8 +401,8 @@
 					}
 				}
 			}
-			
-			# --- eof items and labels			
+
+			# --- eof items and labels
 
 			# find out scending
 			$request['scending'] = in_array($request['scending'], array('asc', 'desc')) ? $request['scending'] : 'desc';
@@ -418,9 +419,9 @@
 			# it won't get grouped
 
 			# echo $tmp_path."\n";
-			
+
 /*
-			$sql = 
+			$sql =
 				'
 				SELECT
 					p.path AS folder,
@@ -448,7 +449,7 @@
 */
 
 
-			$sql = 
+			$sql =
 				'
 				SELECT
 					p.path AS folder,
@@ -469,13 +470,13 @@
 						p1.path LIKE "'.dbres($link, ($tmp_path)).'%"
 						AND p1.existing=1
 					GROUP BY p1.path
-					) AS p				
+					) AS p
 				GROUP BY
 					folderold
 				ORDER BY folderold '.$request['scending'];
-			
+
 			$sqllog[] = $sql;
-			
+
 			$folders = db_query($link, $sql);
 
 			foreach ($folders as $k => $v) {
@@ -483,7 +484,7 @@
 
 				$folders[$k]['folder'] = mb_substr($folders[$k]['folder'], 0, mb_strpos($folders[$k]['folder'], '/'));
 			}
-			
+
 			# make sure the paths are fullpaths
 			# $items = fullpaths($items, array('folder'));
 
@@ -493,7 +494,7 @@
 				$tmp[] = $v;
 			}
 			$folders = $tmp;
-			
+
 			# extract folder
 			$folders = _array($folders, array('folder'));
 
@@ -510,10 +511,10 @@
 					FROM
 						'.DATABASE_TABLES_PREFIX.'media
 					WHERE
-						id = "'.dbres($link, $request['id_media']).'" 
+						id = "'.dbres($link, $request['id_media']).'"
 						AND existing=1
-					ORDER BY 
-						CONCAT(path,name) 
+					ORDER BY
+						CONCAT(path,name)
 					LIMIT 1';
 			$sqllog[] = $sql;
 			$item = db_query($link, $sql);
@@ -526,50 +527,50 @@
 			$item = count($item) ? $item[0] : false;
 
 			$request['path'] = mb_substr($item['path'], mb_strlen(ROOTPATH));
-			
-			
+
+
 			# walk possible raw file extensions
 			$item['raws'] = array();
 			foreach (array(
-				'3FR', 
-				'ARI', 
-				'ARW', 
-				'BAY', 
-				'CAP', 
-				'CR2', 
-				'CRW', 
-				'DATA', 
-				'DCR', 
-				'DCS', 
-				'DNG', 
-				'DRF', 
-				'EIP', 
-				'ERF', 
-				'FFF', 
-				'IIQ', 
-				'K25', 
-				'KDC', 
-				'MDC', 
-				'MEF', 
-				'MOS', 
-				'MRW', 
-				'NEF', 
-				'NRW', 
-				'OBM', 
-				'ORF', 
-				'PEF', 
-				'PTX', 
-				'PXN', 
-				'R3D', 
-				'RAF', 
-				'RAW', 
-				'RW2', 
-				'RWL', 
-				'RWZ', 
-				'SR2', 
-				'SRF', 
-				'SRW', 
-				'X3F'			
+				'3FR',
+				'ARI',
+				'ARW',
+				'BAY',
+				'CAP',
+				'CR2',
+				'CRW',
+				'DATA',
+				'DCR',
+				'DCS',
+				'DNG',
+				'DRF',
+				'EIP',
+				'ERF',
+				'FFF',
+				'IIQ',
+				'K25',
+				'KDC',
+				'MDC',
+				'MEF',
+				'MOS',
+				'MRW',
+				'NEF',
+				'NRW',
+				'OBM',
+				'ORF',
+				'PEF',
+				'PTX',
+				'PXN',
+				'R3D',
+				'RAF',
+				'RAW',
+				'RW2',
+				'RWL',
+				'RWZ',
+				'SR2',
+				'SRF',
+				'SRW',
+				'X3F'
 			) as $k => $v) {
 				# get raw ext path
 				$rawpath = $item['path'].substr($item['name'],0,strrpos($item['name'],'.')).'.'.$v;
@@ -582,7 +583,7 @@
 					);
 				}
 			}
-			
+
 			$item['size'] = filesize(($item['path'].$item['name']));
 
 
@@ -597,9 +598,9 @@
 			$sql = 'SELECT id_media, id_labels FROM '.DATABASE_TABLES_PREFIX.'relations_media_labels WHERE id_media="'.dbres($link, $request['id_media']).'"';
 			$sqllog[] = $sql;
 			$relations = db_query($link, $sql);
-		
+
 			$item['id_labels'] = array();
-		
+
 			# were there any relations?
 			if (count($relations)) {
 					# walk relations
@@ -610,7 +611,7 @@
 							$item['id_labels'][] = (int)$r['id_labels'];
 						}
 					}
-			}			
+			}
 
 			# calculate prev item id
 			$sql = '
@@ -699,7 +700,7 @@
 
 
 			# update views counter
-			$sql = 'UPDATE '.DATABASE_TABLES_PREFIX.'media SET views=views+1 WHERE id="'.dbres($link, $request['id_media']).'"';			
+			$sql = 'UPDATE '.DATABASE_TABLES_PREFIX.'media SET views=views+1 WHERE id="'.dbres($link, $request['id_media']).'"';
 			$sqllog[] = $sql;
 			$update_counter = db_query($link, $sql);
 
@@ -716,11 +717,11 @@
 
 
 						$rawextension = preg_replace("/[^A-Za-z0-9 ]/", '', $request['rawextension']);
-						
+
 						if (!strlen($rawextension)) {
 							die('Missing rawextension parameter.');
 						}
-						
+
 
 						$filepath = $item['path'].substr($item['name'],0,strrpos($item['name'],'.')).'.'.$rawextension;
 						if (!file_exists($filepath)) die('File not found.');
@@ -776,11 +777,11 @@
 
 
 						$rawextension = preg_replace("/[^A-Za-z0-9 ]/", '', $request['rawextension']);
-						
+
 						if (!strlen($rawextension)) {
 							die('Missing rawextension parameter.');
 						}
-						
+
 
 						$filepath = $item['path'].substr($item['name'],0,strrpos($item['name'],'.')).'.'.$rawextension;
 						if (!file_exists($filepath)) die('File not found.');

@@ -25,7 +25,7 @@ body
 	background: linear-gradient(to bottom,  #010101 0%,#171c32 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#010101', endColorstr='#171c32',GradientType=0 ); /* IE6-9 */
 	height: 100%;
-	
+
 	height: 100%;
     margin: 0;
     background-repeat: no-repeat;
@@ -80,7 +80,7 @@ input.text {
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px), only screen and (min-device-width : 480px) and (max-device-width : 800px), only screen and (max-width: 500px) {
 	input.text {
 		font-size: 16px;
-	}	
+	}
 }
 
 @media only screen and (max-width: 500px) {
@@ -106,7 +106,7 @@ input.submit {
 		padding-left:10px;
 		padding-right:10px;
 		font-size:16px;
-	}	
+	}
 }
 
 button:hover,
@@ -326,7 +326,7 @@ table.exif td
 
 .breadcrumbs
 {
-	
+
 	margin-top: 5px;
 	text-align:center;
 	color:gray;

@@ -8,6 +8,7 @@
 	# 2016-09-17 16:21:59 - table photos->media
 	# 2016-09-18 11:09:37 - bugfix, explode made extra empty lines
 	# 2016-09-18 11:54:49 - thumbnailing, updating display with progressbar
+	# 2017-02-12 00:14:52 - trailing space removal
 
 	require_once('include/functions.php');
 
@@ -23,29 +24,29 @@
 
 		# character length for progress bar
 		$pb_length = 10;
-	
+
 		# calculate the part
 		$pb_part = round( ($part > 0 && $total > 0) ? ($part/$total) * $pb_length : 0);
 		# calculate the total
 		$pb_total = $pb_length;
 
-		return 
+		return
 			'['.
 			str_repeat('#', ($part < $total && $pb_part > 0) ? $pb_part - 1 : $pb_part ).
-		
+
 			($part < $total && $pb_part > 0 ? '>' : '').
-		
+
 			str_repeat('.', $pb_total - $pb_part).
-			'] '.			
-			# the first number is the actual amount of characters in the 
+			'] '.
+			# the first number is the actual amount of characters in the
 			# resulting string, and we want 000.000, so that's 7
 			sprintf("%07.3f", ($part > 0 && $total > 0) ? ($part / $total) * 100 : 0, 1).
 			'% '.
 			str_pad($part, strlen($total), '0', STR_PAD_LEFT).
 			'/'.
 			$total.
-			' '		
-			;			
+			' '
+			;
 	}
 
 	# VERY important, otherwise find won't find any filenames (but find folders!) with non-utf-8 names
@@ -93,16 +94,16 @@
 			# get a list of files
 			# $cmd = 'find '.escapeshellarg($rootpath).' \( -type f -iname "*.JPG" \) -o \( -type f -iname "*.JPEG" \} -o \( -type f -iname "*.TIF" \) -o \( -type f -iname "*.TIFF" \)';
 			# $cmd = 'find '.escapeshellarg($rootpath).' -type f -iname "*.JPG" -o -iname "*.JPEG" -o -iname "*.TIF" -o -iname "*.TIFF"';
-			
+
 			$exts = '';
-			
+
 			$imgexts = array(
 				'jpg',
 				'jpeg',
 				'tif',
 				'tiff'
 			);
-			
+
 			$videoexts = array(
 				'avi',
 				'3gp',
@@ -111,11 +112,11 @@
 				'mp4',
 				'mov'
 			);
-			
+
 			foreach (array_merge($imgexts, $videoexts) as $v) {
 				$exts[] = '-iname "*.'.$v.'"';
 			}
-			
+
 			# $cmd = 'find '.escapeshellarg($rootpath).' -type f \( -iname "*.JPG" -o -iname "*.JPEG" -o -iname "*.TIF" -o -iname "*.TIFF" \)';
 
 			$cmd = 'find '.escapeshellarg($rootpath).' -type f \( '.implode(' -o ', $exts).' \)';
@@ -127,13 +128,13 @@
 			}
 
 			$files = explode("\n", $files);
-			
+
 			# explode leave empty lines (at the end)
 			# we do this as there is no multibyte trim
 			$files = array_filter($files, function($value) {
-				return (mb_strlen($value) > 0); 
-			});			
-			
+				return (mb_strlen($value) > 0);
+			});
+
 			$new_files = array();
 			# walk files
 			foreach ($files as $k => $v) {
@@ -143,7 +144,7 @@
 				if ($realpath === false) continue;
 				# make sure it is a file and not a folder, should not happen but test it anyway
 				if (!is_file($realpath)) continue;
-				
+
 				$new_files[] = $realpath;
 			}
 			$files = $new_files;
@@ -152,7 +153,7 @@
 			$sql = 'UPDATE '.DATABASE_TABLES_PREFIX.'media SET verified=0';
 			$r = db_query($link, $sql);
 
-			# simple stats collector 
+			# simple stats collector
 			$stats = array(
 				'inserted' => 0,
 				'nonexistant' => 0,
@@ -178,12 +179,12 @@
 				if (!file_exists($file) || filesize($file) < 1) {
 				 		# o("\n".'Nonexistant / 0-size: '.$file);
 						$stats['nonexistant']++;
-						
+
 						o(
 							progressbar($i, $total).
 							str_pad($stats['nonexistant'], strlen($total.''), '0', STR_PAD_LEFT).' - Nonexistant...', "\r"
-						);						
-						
+						);
+
 						continue;
 				}
 
@@ -238,12 +239,12 @@
 					$sql = 'UPDATE '.DATABASE_TABLES_PREFIX.'media SET verified=1,existing=1 WHERE id="'.dbres($link, $r[0]['id']).'"';
 					db_query($link, $sql);
 					$stats['verified']++;
-					
+
 					o(
 						progressbar($i, $total).
 						str_pad($stats['verified'], strlen($total.''), '0', STR_PAD_LEFT).' - Verified...', "\r"
 					);
-					
+
 					# go next photo
 					continue;
 				}
@@ -256,7 +257,7 @@
 					$text
 					, "\r"
 				);
-				
+
 				# compute ed2khash
 				$hash = ed2khash($file);
 				if (!$hash) {
@@ -316,7 +317,7 @@
 					$stats['updated']++;
 
 					o(
-						progressbar($i, $total).					
+						progressbar($i, $total).
 						str_pad($stats['updated'], strlen($total.''), '0', STR_PAD_LEFT).' - Updating...', "\r"
 					);
 
@@ -411,28 +412,28 @@
 
 				# print info
 				#o(($k > 0 ? round(($k/$total)*100) : 0).'% - #'.$item['id']);
-				
+
 				# make a thumbnail
 				$stats = make_thumbnails($item['ed2khash'], $item['path'].$item['name'], true);
-				
+
 				# has the creation of thumbs failed?
 				if (array_search('failed', $stats) !== false) {
 					# mark it in db
 					$sql = 'UPDATE media SET thumbstatus=-1 WHERE id='.dbres($link, $item['id']);
 					$update_media = db_query($link, $sql);
-				
+
 				# or is it done
 				} else if (
-					(isset($stats[$thumbsizes['normal']], $stats[$thumbsizes['small']])) &&					
+					(isset($stats[$thumbsizes['normal']], $stats[$thumbsizes['small']])) &&
 					($stats[$thumbsizes['normal']] === 'already done' || $stats[$thumbsizes['normal']] === 'created') &&
-					($stats[$thumbsizes['small']] === 'already done' || $stats[$thumbsizes['small']] === 'created')					
+					($stats[$thumbsizes['small']] === 'already done' || $stats[$thumbsizes['small']] === 'created')
 				) {
 					# mark it in db as done
 					$sql = 'UPDATE media SET thumbstatus=1 WHERE id='.dbres($link, $item['id']);
 					$update_media = db_query($link, $sql);
 				}
-				
-				# make stat key => stat value to stat key => stat key: stat value				
+
+				# make stat key => stat value to stat key => stat key: stat value
 				foreach ($stats as $statkey => $statvalue) {
 					$stats[$statkey] = $statkey.': '.$statvalue;
 				}
@@ -445,13 +446,13 @@
 
 				o(
 					$text, "\r"
-				);						
+				);
 			}
 			o("\nDuration: ".(time() - $start).'s');
 			break;
 
 		case 'verifydouble': # generate all thumbs
-		
+
 			o('Starting action '.$action);
 			set_time_limit(0);
 			$start = time();
@@ -477,7 +478,7 @@
 
 			o("Duration: ".(time() - $start).'s');
 			break;
-			
+
 		case 'thumbstatusreset': # to reset thumbnail ban status (-1)
 			$sql = 'UPDATE media SET thumbstatus=0';
 			$update_media = db_query($link, $sql);
@@ -485,9 +486,9 @@
 			break;
 
 		case 'xtempmove': # generate all thumbs
-		
+
 			die();
-		
+
 			o('Starting action '.$action);
 			set_time_limit(0);
 			$start = time();
@@ -555,11 +556,11 @@
 				}
 			}
 			break;
-			
+
 		case 'xxxgps':
-		
+
 			die();
-		
+
 			# $file = '';
 			$file = '';
 			#$exifdata = exif_read_data($file, 'IFD0', true);
@@ -568,18 +569,18 @@
 
 			$c = 'exiftool -G -j '.escapeshellarg($file);
 			exec($c, $o, $r);
-			
+
 			if ($r === 0) {
-			
+
 				$o = implode("\n", $o);
 				$o = json_decode($o, true);
-				
-				
+
+
 				$gps['GPSLongitude'] = $o[0]['EXIF:GPSLatitude'];
 				$gps['GPSLatitude'] = $o[0]['EXIF:GPSLongitude'];
 				$gps['GPSLongitudeRef'] = strtoupper(substr($o[0]['EXIF:GPSLatitudeRef'], 0, 1));
 				$gps['GPSLatitudeRef'] = strtoupper(substr($o[0]['EXIF:GPSLongitudeRef'], 0, 1));
-				
+
 				$gps = read_gps_location($gps);
 				var_dump($gps);
 			}
@@ -588,7 +589,7 @@
 			#var_dump($exifdata);
 
 			#var_dump(read_gps_location($exifdata));
-		
+
 			break;
 	}
 ?>
