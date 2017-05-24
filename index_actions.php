@@ -331,7 +331,7 @@
 			if ($method === 'http') {
 				# this is what is needed to get Visum login over HTTP
 				require_once('class-visum.php');
-				 $visum = new Visum();
+				$visum = new Visum();
 				# var_dump($visum->getUserByTicket($request['ticket']));
 			} else if ($method === 'direct') {
 				# this is what is needed to get Visum login directly

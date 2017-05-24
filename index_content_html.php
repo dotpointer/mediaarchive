@@ -12,6 +12,7 @@
 	# 2016-09-15 21:02:25 - using jquery/jquery-ui 3.1.0/1.12.0
 	# 2016-09-16 17:31:01 - http/https
 	# 2017-02-12 00:14:23 - trailing space removal
+	# 2017-02-12 12:08:47 - adding meta description
 
 	if (!isset($request['page'])) die();
 
@@ -20,6 +21,7 @@
 <html>
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta name="description" content="The media archive." />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<title><?php echo t('The media archive')?></title>
 	<link rel="shortcut icon" href="favicon.ico" />

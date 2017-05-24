@@ -9,6 +9,7 @@
 	# 2016-09-18 11:09:37 - bugfix, explode made extra empty lines
 	# 2016-09-18 11:54:49 - thumbnailing, updating display with progressbar
 	# 2017-02-12 00:14:52 - trailing space removal
+	# 2017-05-24 20:11:45 - bugfix, make_thumbnails returned invalid values
 
 	require_once('include/functions.php');
 
@@ -72,7 +73,7 @@
 				if (strlen($v) < 3) die('Invalid action'."\n");
 				$action = $v;
 				break;
-		 	case 'v': # verbose
+			case 'v': # verbose
 					$verbose = true;
 					break;
 		}
@@ -177,7 +178,7 @@
 
 				# TODO: how to deal with nonexistant files?
 				if (!file_exists($file) || filesize($file) < 1) {
-				 		# o("\n".'Nonexistant / 0-size: '.$file);
+						# o("\n".'Nonexistant / 0-size: '.$file);
 						$stats['nonexistant']++;
 
 						o(

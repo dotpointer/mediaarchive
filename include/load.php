@@ -1252,7 +1252,7 @@ var g = {
 							limit:		$("#form_findbar select[name=\"limit\"]").val(),
 							monthfrom:	$("#form_findbar select[name=\"monthfrom\"]").val(),
 							monthto:	$("#form_findbar select[name=\"monthto\"]").val(),
-							scending: 	$("#form_findbar input[name=\"scending\"]").val(),
+							scending:	$("#form_findbar input[name=\"scending\"]").val(),
 							widthfrom:	$("#form_findbar input[name=\"widthfrom\"]").val(),
 							widthto:	$("#form_findbar input[name=\"widthto\"]").val(),
 							yearfrom:	$("#form_findbar select[name=\"yearfrom\"]").val(),
@@ -1426,16 +1426,16 @@ var g = {
 								g.switch_page("find", g.find);
 
 								return false;
- 							};
+							};
 
 							event_forward_click = function(e) {
 								e.preventDefault();
 								g.find.start = g.find.start + g.find.limit;
 								g.switch_page("find", g.find);
 								return false;
- 							};
+							};
 
- 							g.check_data_for_updates(data);
+							g.check_data_for_updates(data);
 
 							$(".content")
 								.empty()
@@ -1941,8 +1941,8 @@ var g = {
 									$.postJSON(
 										"?", {
 											action: "unlabel_media",
-											id_media: 	g.pi10($(this).parents("div:first").attr("data-id_media")),
-											id_labels: 	g.pi10($(this).parents("div:first").attr("data-id_labels")),
+											id_media:	g.pi10($(this).parents("div:first").attr("data-id_media")),
+											id_labels:	g.pi10($(this).parents("div:first").attr("data-id_labels")),
 											format: "json"
 										}, function(data) {
 
@@ -2846,7 +2846,7 @@ var g = {
 
 							// var i;
 							// var k;
-							// 	var l;
+							//	var l;
 							// var labels;
 							var event_folder_click;
 							// var event_item_click;

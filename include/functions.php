@@ -173,7 +173,7 @@
 		# $s = trim(exec('ps ax|grep convert'));
 		# if (strlen($s)) return false;
 		$size = $desired_size;
-	  # $command = MAGICK_PATH.'convert '.escapeshellarg($in).' -auto-orient -resize '.$size.' -strip -quality '.MAGICK_THUMBNAIL_QUALITY.' '.escapeshellarg($out);
+	# $command = MAGICK_PATH.'convert '.escapeshellarg($in).' -auto-orient -resize '.$size.' -strip -quality '.MAGICK_THUMBNAIL_QUALITY.' '.escapeshellarg($out);
 		$command = MAGICK_PATH.'convert '.escapeshellarg($in).' -quality '.MAGICK_THUMBNAIL_QUALITY.' -auto-orient -strip -sample '.$size.' '.escapeshellarg($out);
 
 		exec($command);
@@ -277,7 +277,7 @@
 
 				$stats[$v] = '';
 
-	 			$filepath = get_thumbnail_path($hash, $k);
+				$filepath = get_thumbnail_path($hash, $k);
 
 				if ($filepath === false) {
 					die('Failed getting thumbnail path: '.$sourcepath);
@@ -287,8 +287,11 @@
 				if (!file_exists($filepath)) {
 					$s = trim(exec('ps ax|grep convert|grep -v grep'));
 					if (strlen($s)) {
-						$stats[$v] = 'skipping, convert already running';
-						return false;
+						echo 'Skipping, convert already running'."\n";
+						return array(
+							'small' => 'failed',
+							'normal' => 'failed'
+						);
 					}
 
 
@@ -330,7 +333,10 @@
 
 				if (!file_exists($normalthumbpath)) {
 					echo 'Failed creating videosheet for: '.$sourcepath;
-					return false;
+					return array(
+						'small' => 'failed',
+						'normal' => 'failed'
+					);
 				}
 
 				$stats[$thumbsizes['normal']] = 'created';
@@ -492,11 +498,11 @@
 
 	# lnr
 	/**
-	 * Returns an array of latitude and longitude from the Image file
-	 * @param image $file
-	 * @return multitype:number |boolean
-	 * @source LoneWOLFs - http://stackoverflow.com/questions/5449282/reading-geotag-data-from-image-in-php
-	 */
+	* Returns an array of latitude and longitude from the Image file
+	* @param image $file
+	* @return multitype:number |boolean
+	* @source LoneWOLFs - http://stackoverflow.com/questions/5449282/reading-geotag-data-from-image-in-php
+	*/
 	function read_gps_location($exifdata) {
 
 		if (isset($exifdata['GPSLatitude']) && isset($exifdata['GPSLongitude']) &&
@@ -709,7 +715,7 @@
 		$translations['current']['index'] = get_working_locale($translations['languages'], $locale);
 
 		# set this locale
-	    $translations['current']['locale'] = reset($translations['languages'][$translations['current']['index']]['locales']);
+	$translations['current']['locale'] = reset($translations['languages'][$translations['current']['index']]['locales']);
 
 		return true;
 	}

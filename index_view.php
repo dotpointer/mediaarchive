@@ -334,7 +334,7 @@
 			# remove the first slash from the frontend path
 			$tmp_path = ROOTPATH.mb_substr($tmp_path, 1);
 
-			$sql = 				'
+			$sql =				'
 				SELECT
 					*
 				FROM
@@ -681,11 +681,11 @@
 				case 'png':
 					$mime = 'image/x-png';
 					break;
-			    	case 'tif':
-			    	case 'tiff':
-			    		$mime = 'image/tiff';
-			    		break;
-			   	case 'avi':
+				case 'tif':
+				case 'tiff':
+					$mime = 'image/tiff';
+					break;
+				case 'avi':
 				case 'mp4':
 				case 'mp3':
 				case 'mpg':
