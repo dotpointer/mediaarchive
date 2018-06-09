@@ -46,7 +46,7 @@
 	define('CONFIG_NAME', 'mediaarchive');
 
 	# get base constants
-	require_once('config.php');
+	require_once('setup.php');
 
 	define('SITE_SHORTNAME', 'mediaarchive');
 
@@ -113,7 +113,7 @@
 	function makeThumbnail($desired_size, $in, $out, $display=false) {
 
 		# missing imagemagick - try service
-		if (!file_exists(MAGICK_PATH.'convert')) {
+		if (!file_exists(MAGICK_PATH.'convert') && SERVICE_KEY_MAKETHUMBNAIL !== false) {
 
 			# get url to service
 			$url = file_get_contents('http://www.'.BASE_DOMAINNAME.'/service/?action=dynresolve&redirect=0&hostname=rnbw&pattern=http://___IP___/');
@@ -129,7 +129,7 @@
 			curl_setopt($ch, CURLOPT_POSTFIELDS, array(
 				'file' => new CurlFile($file),
 				'action' => 'makethumbnail',
-				'lsk' => '***REMOVED***',
+				'lsk' => SERVICE_KEY_MAKETHUMBNAIL,
 				'size' => $desired_size, # 1024x768
 				'quality' => MAGICK_THUMBNAIL_QUALITY
 			));
