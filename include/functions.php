@@ -108,7 +108,7 @@
 			)
 		)
 	);
-
+	
 	# lnr - to make a thumbnail
 	function makeThumbnail($desired_size, $in, $out, $display=false) {
 
@@ -223,6 +223,11 @@
 		return true;
 	}
 
+	# to get visum class from the same directory as the functions file
+	function require_visum() {
+		require_once('class-visum.php');
+	}
+
 	$thumbsizes = array(
 		'small' => '160x120',
 		'normal' => '1024x768'
@@ -321,7 +326,7 @@
 			if (!file_exists($normalthumbpath)) {
 
 				# run video sheet to make it
-				$c = 'php '.DPTOOLS_DIR.'videosheet --filename='.escapeshellarg($sourcepath).($verbose ? ' -vv' : '').' --format=jpeg --quality=75 --thumbsize=205,-1 --compact --output='.escapeshellarg($normalthumbpath);
+				$c = 'php videosheet --filename='.escapeshellarg($sourcepath).($verbose ? ' -vv' : '').' --format=jpeg --quality=75 --thumbsize=205,-1 --compact --output='.escapeshellarg($normalthumbpath);
 				passthru($c, $r);
 				if ($r !== 0) {
 					echo 'Failed creating videosheet for: '.$sourcepath."\n";

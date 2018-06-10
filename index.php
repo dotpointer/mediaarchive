@@ -8,6 +8,7 @@
 # 2013-10-27 - updating
 # 2015-11-04 15:44:16 - adding cameras
 
+
 # get required functions
 require_once('include/functions.php');
 

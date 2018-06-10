@@ -330,7 +330,7 @@
 			$method='http';
 			if ($method === 'http') {
 				# this is what is needed to get Visum login over HTTP
-				require_once('class-visum.php');
+				require_visum();
 				$visum = new Visum();
 				# var_dump($visum->getUserByTicket($request['ticket']));
 			} else if ($method === 'direct') {
@@ -338,7 +338,7 @@
 				#define('DATABASE_NAME', 'visum'); # just because base wants this
 				#require_once('base.php'); # needed because of connection functions and such
 				# require_once('../include/functions.php'); # visum functionality used for direct communication
-				require_once('class-visum.php'); # visum client class
+				require_visum();
 				#file_get_contents('class-visum.php');
 				#$link = db_connect();
 				# m-ysql_set_charset('utf8', $link);
