@@ -10,8 +10,8 @@
 	# database setup
 	# fill this in
 	define('DATABASE_HOST', 'localhost');
-	define('DATABASE_USERNAME', 'root');
-	define('DATABASE_PASSWORD', '');
+	define('DATABASE_USERNAME', 'www');
+	define('DATABASE_PASSWORD', 'www');
 	define('DATABASE_NAME', 'mediaarchive');
 	define('DATABASE_TABLES_PREFIX', '' /* 'mediaarchive_'*/);
 
