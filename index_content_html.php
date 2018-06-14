@@ -36,8 +36,9 @@
 
 	<script type="text/javascript" src="include/jquery.hotkeys.js"></script>
 
-    <script async defer src="//maps.googleapis.com/maps/api/js<?php echo defined('MAPS_API_KEY') && strlen(MAPS_API_KEY) ? '?key='.MAPS_API_KEY : '' ?><?php /* &callback=initMap */ ?>" type="text/javascript"></script>
-
+<?php if (defined('MAPS_ENABLED') && constant('MAPS_ENABLED')) { ?>
+	<script async defer src="//maps.googleapis.com/maps/api/js<?php echo defined('MAPS_API_KEY') && strlen(constant('MAPS_API_KEY')) ? '?key='.constant('MAPS_API_KEY') : '' ?><?php /* &callback=initMap */ ?>" type="text/javascript"></script>
+<?php } ?>
 	<script type="text/javascript" src="include/intro.js"></script>
 
 	<script type="text/javascript">
