@@ -15,6 +15,7 @@
 	# 2016-09-26 23:55:58 - login display, trash display
 	# 2016-09-30 09:50:59 - greeting text
 	# 2017-02-12 00:16:00 - trailing space removal
+	# 2018-06-16 01:54:00 - updating Google Maps API key management
 
 	require_once('functions.php');
 	require_once('request.php');
@@ -123,11 +124,12 @@ var g = {
 		"none" => t('No effect')
 	)); ?>,
 	find: false,
-	guest_mode: <?php echo GUEST_MODE ? 'true' : 'false' ?>,
+	guest_mode: <?php echo defined('GUEST_MODE') && constant('GUEST_MODE') ? 'true' : 'false' ?>,
 	labels: <?php echo json_encode($labels); ?>,
 	label_statistics: <?php echo json_encode($label_statistics); ?>,
 	logged_in: <?php echo is_logged_in(true) ? 'true' : 'false' ?>,
 	locale:  "<?php echo $translations['current']['locale'] ?>",
+	maps_enabled: <?php echo defined('MAPS_ENABLED') && constant('MAPS_ENABLED') ? 'true' : 'false' ?>,
 	months:	<?php echo json_encode($months); ?>,
 	msg: <?php echo json_encode(get_translation_texts()); ?>,
 	viewoptions: "details",
@@ -177,7 +179,7 @@ var g = {
 		// to check if google maps library is ready
 		g.maps_loaded = function() {
 			// is the google maps library gone?
-			if (typeof google !== "object" || google.maps === undefined ) {
+			if (!g.maps_enabled || typeof google !== "object" || google.maps === undefined ) {
 				// then quit here
 				return false;
 			}

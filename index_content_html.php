@@ -13,6 +13,7 @@
 	# 2016-09-16 17:31:01 - http/https
 	# 2017-02-12 00:14:23 - trailing space removal
 	# 2017-02-12 12:08:47 - adding meta description
+	# 2018-06-16 01:54:00 - updating Google Maps API key management
 
 	if (!isset($request['page'])) die();
 

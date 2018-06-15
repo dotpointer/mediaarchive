@@ -39,7 +39,13 @@
 	# service key to make thumbnail if imagemagick does not exist
 	# leave this as it is
 	define('SERVICE_KEY_MAKETHUMBNAIL', false);
+
+	# Google Maps toggle, set to true to show maps
+	define('MAPS_ENABLED', false);
 	
+	# Google Maps API key, required to show maps
+	define('MAPS_API_KEY', '');
+
 	# the root path where media resides
 	# note, this path may not be a relative path
 	# fill this in with the directory where media is available
