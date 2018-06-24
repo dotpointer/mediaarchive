@@ -14,6 +14,7 @@
 	# 2016-09-18 12:22:34 - adding config constant for thumbnail quality
 	# 2016-09-22 22:27:59 - base 2 to base 3
 	# 2017-02-12 00:15:21 - trailing space removal
+	# 2018-06-24 18:08:00 - bugfix, videosheet was not found
 
 	# legend
 	# lnr = login not required
@@ -326,7 +327,7 @@
 			if (!file_exists($normalthumbpath)) {
 
 				# run video sheet to make it
-				$c = 'php videosheet --filename='.escapeshellarg($sourcepath).($verbose ? ' -vv' : '').' --format=jpeg --quality=75 --thumbsize=205,-1 --compact --output='.escapeshellarg($normalthumbpath);
+				$c = 'php '.dirname(__FILE__).'/videosheet --filename='.escapeshellarg($sourcepath).($verbose ? ' -vv' : '').' --format=jpeg --quality=75 --thumbsize=205,-1 --compact --output='.escapeshellarg($normalthumbpath);
 				passthru($c, $r);
 				if ($r !== 0) {
 					echo 'Failed creating videosheet for: '.$sourcepath."\n";
