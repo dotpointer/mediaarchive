@@ -5,19 +5,19 @@ var basic = {};
 var	g = {};
 
 (function() {
-	"use strict";
+  "use strict";
 
-	jQuery.extend({
-		postJSON: function (url, data, callback) {
-			return jQuery.post(url, data, callback, "json");
-		}
-	});
+  jQuery.extend({
+    postJSON: function (url, data, callback) {
+      return jQuery.post(url, data, callback, "json");
+    }
+  });
 
-	$(function() {
-		basic.startup = function() {
-			$.getScript("include/load.php?nocache=" + Date.now());
-		};
+  $(function() {
+    basic.startup = function() {
+      $.getScript("include/load.php?nocache=" + Date.now());
+    };
 
-		basic.startup();
-	});
+    basic.startup();
+  });
 }());
