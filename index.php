@@ -9,7 +9,7 @@
 # 2015-11-04 15:44:16 - adding cameras
 # 2018-06-16 01:05:09
 # 2018-07-19 18:47:16 - indentation change, tab to 2 spaces
-
+# 2018-12-20 19:04:00 - moving translation to Base translate
 
 # get required functions
 require_once('include/functions.php');
@@ -18,7 +18,7 @@ require_once('include/functions.php');
 require_once('include/request.php');
 
 # warm up translations
-start_translations();
+start_translations(dirname(__FILE__).'/include/locales/');
 
 # do actions
 require_once('index_actions.php');

@@ -17,11 +17,12 @@
   # 2017-02-12 00:16:00 - trailing space removal
   # 2018-06-16 01:54:00 - updating Google Maps API key management
   # 2018-07-19 18:47:15 - indentation change, tab to 2 spaces
+  # 2018-12-20 19:04:00 - moving translation to Base translate
 
   require_once('functions.php');
   require_once('request.php');
 
-  start_translations();
+  start_translations(dirname(__FILE__).'/locales/');
 
   $cameras = array();
   $labels = array();
@@ -1584,35 +1585,37 @@ var g = {
 
                           // walk labels in this item
                           //for (k in data.data[i].items[j].id_labels) {
-                          Object.keys(data.data[i].items[j].id_labels).forEach(function (k) {
-                            if (data.data[i].items[j].id_labels.hasOwnProperty(k)) {
+                          if (data.data[i].items[j].id_labels != null) {
+                            Object.keys(data.data[i].items[j].id_labels).forEach(function (k) {
+                              if (data.data[i].items[j].id_labels.hasOwnProperty(k)) {
 
-                              // walk labels
-                              // for (l in g.labels) {
-                              Object.keys(g.labels).forEach(function (l) {
-                                if (g.labels.hasOwnProperty(l)) {
+                                // walk labels
+                                // for (l in g.labels) {
+                                Object.keys(g.labels).forEach(function (l) {
+                                  if (g.labels.hasOwnProperty(l)) {
 
-                                  // does this label id match the item label id
-                                  if (g.pi10(g.labels[l].id) === g.pi10(data.data[i].items[j].id_labels[k])) {
-                                    // then add this to the list of labels
-                                    labels.append(
-                                      $("<div/>")
-                                        .addClass("label")
-                                        .attr({
-                                          "data-id_labels": g.labels[l].id,
-                                          title: g.labels[l].title
-                                        })
-                                        .text(g.labels[l].title.substring(0,3))
-                                    );
+                                    // does this label id match the item label id
+                                    if (g.pi10(g.labels[l].id) === g.pi10(data.data[i].items[j].id_labels[k])) {
+                                      // then add this to the list of labels
+                                      labels.append(
+                                        $("<div/>")
+                                          .addClass("label")
+                                          .attr({
+                                            "data-id_labels": g.labels[l].id,
+                                            title: g.labels[l].title
+                                          })
+                                          .text(g.labels[l].title.substring(0,3))
+                                      );
+                                    }
+
                                   }
+                                //} // eof-walk labels
+                                });
 
-                                }
-                              //} // eof-walk labels
-                              });
-
-                            }
-                          //} // eof-walk labels in this item
-                          });
+                              }
+                            //} // eof-walk labels in this item
+                            });
+                          }
 
                           $(".content .items:last .clear_both").before(
                             $("<div/>")
