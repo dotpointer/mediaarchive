@@ -18,6 +18,7 @@
   # 2018-06-16 01:54:00 - updating Google Maps API key management
   # 2018-07-19 18:47:15 - indentation change, tab to 2 spaces
   # 2018-12-20 19:04:00 - moving translation to Base translate
+  # 2019-05-04 05:28:00 - bugfix, camera filter was not usable
 
   require_once('functions.php');
   require_once('request.php');
@@ -665,7 +666,7 @@ var g = {
                       .attr({
                         title: g.t("Display media captured by this camera"),
                         type: "text",
-                        name: "find"
+                        name: "id_cameras"
                       })
                       .addClass("optional")
                       .append(
@@ -1251,7 +1252,7 @@ var g = {
               heightto:	$("#form_findbar input[name=\"heightto\"]").val(),
               hourfrom:	$("#form_findbar select[name=\"hourfrom\"]").val(),
               hourto:		$("#form_findbar select[name=\"hourto\"]").val(),
-              id_camera:	$("#form_findbar select[name=\"id_camera\"]").val(),
+              id_cameras:	$("#form_findbar select[name=\"id_cameras\"]").val(),
               id_labels:	$("#form_findbar select[name=\"id_labels\"]").val(),
               limit:		$("#form_findbar select[name=\"limit\"]").val(),
               monthfrom:	$("#form_findbar select[name=\"monthfrom\"]").val(),
