@@ -12,6 +12,7 @@
   # 2017-05-24 20:11:45 - bugfix, make_thumbnails returned invalid values
   # 2018-06-16 01:05:11
   # 2018-07-19 18:47:16 - indentation change, tab to 2 spaces
+  # 2019-10-31 20:54:00 - bugfix, variable initialization
 
   require_once('include/functions.php');
 
@@ -98,7 +99,7 @@
       # $cmd = 'find '.escapeshellarg($rootpath).' \( -type f -iname "*.JPG" \) -o \( -type f -iname "*.JPEG" \} -o \( -type f -iname "*.TIF" \) -o \( -type f -iname "*.TIFF" \)';
       # $cmd = 'find '.escapeshellarg($rootpath).' -type f -iname "*.JPG" -o -iname "*.JPEG" -o -iname "*.TIF" -o -iname "*.TIFF"';
 
-      $exts = '';
+      $exts = array();
 
       $imgexts = array(
         'jpg',
